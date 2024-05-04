@@ -1,78 +1,59 @@
+
 # import tkinter as tk
 # from tkinter import font
-# from tokenizer_1 import Lexer
+# from tokenizer import Lexer
 
-# class TokenizerApp:
+# class TokenizerGUI:
 #     def __init__(self, master):
 #         self.master = master
-#         master.title("Expression Tokenizer")
-#         master.geometry("400x300")
-#         master.minsize(500, 500)
+#         self.master.title("Tokenization GUI")
 
-#         # Set up fonts
-#         self.title_font = font.Font(family="Arial", size=20, weight="bold")
+#         self._setup_fonts()
+#         self._create_widgets()
+
+#     def _setup_fonts(self):
 #         self.text_font = font.Font(family="Helvetica", size=12)
 
-#         # Set up frames
-#         self.title_frame = tk.Frame(master)
-#         self.entry_frame = tk.Frame(master)
-#         self.button_frame = tk.Frame(master)
-#         self.result_frame = tk.Frame(master)
+#     def _create_widgets(self):
+#         self.input_label = tk.Label(self.master, text="Enter the input text:", font=self.text_font)
+#         self.input_entry = tk.Entry(self.master, width=50, font=self.text_font)
+#         self.tokenize_button = tk.Button(self.master, text="Tokenize", font=self.text_font, command=self.tokenize)
+#         self.output_text = tk.Text(self.master, height=10, width=70, font=self.text_font)
 
-#         # Set up widgets for first screen
-#         self.title_label = tk.Label(self.title_frame, text="Expression Tokenizer", font=self.title_font)
-#         self.entry_label = tk.Label(self.entry_frame, text="Enter expression:", font=self.text_font)
-#         self.entry = tk.Entry(self.entry_frame, width=70, font=self.text_font)
-#         self.tokenize_button = tk.Button(self.button_frame, text="Tokenize", font=self.text_font, command=self.display_result)
+#         self.input_label.pack(pady=(10, 0))
+#         self.input_entry.pack(pady=5)
+#         self.tokenize_button.pack(pady=5)
+#         self.output_text.pack(pady=10)
 
-#         # Set up widgets for second screen
-#         self.token_label = tk.Label(self.result_frame, text="Tokenization result:", font=self.text_font)
-#         self.token_text = tk.Text(self.result_frame, height=8, width=45, font=self.text_font)
-
-#         # Pack widgets for first screen
-#         self.title_frame.pack(side="top", pady=(30, 10))
-#         self.entry_frame.pack(side="top", pady=10)
-#         self.button_frame.pack(side="top", pady=10)
-
-#         self.title_label.pack()
-#         self.entry_label.pack(side="left")
-#         self.entry.pack(side="left", padx=(0, 10))
-#         self.tokenize_button.pack()
-
-#     def display_result(self):
-#         expression = self.entry.get()
+#     def tokenize(self):
+#         input_text = self.input_entry.get()
 #         lexer = Lexer()
-#         lexer.input_text(expression)
-#         lexer.get_next_token()
-#         tokens = "\n".join(f"{token.type}: {token.value}" for token in lexer.tokens)
+#         lexer.input_text(input_text)
+#         tokens = lexer.get_next_token()
+        
+#         output_tokens = []
+#         for token in tokens:
+#             if token.type.name == "VAR":
+#                 output_tokens.append(f'"{token.type.name}"' + " | \"" + token.value + "\"")
+#             else:
+#                 output_tokens.append(f'"{token.type.name}"')
 
-#         # Clear existing content on the result text widget
-#         self.token_text.delete(1.0, tk.END)
-        
-#         # Insert new tokens
-#         self.token_text.insert(tk.END, tokens)
-        
-#         # Pack widgets for second screen
-#         self.result_frame.pack(side="top", pady=10)
-#         self.token_label.pack(pady=(10, 5))
-#         self.token_text.pack(fill="both", expand=True)
+#         formatted_output = " | ".join(output_tokens)
+#         self.output_text.delete("1.0", tk.END)
+#         self.output_text.insert(tk.END, f"({formatted_output})")
 
 # def main():
 #     root = tk.Tk()
-#     app = TokenizerApp(root)
-#     # Center the window on the screen
-#     window_width = root.winfo_reqwidth()
-#     window_height = root.winfo_reqheight()
-#     position_right = int(root.winfo_screenwidth() / 2 - window_width / 2)
-#     position_down = int(root.winfo_screenheight() / 2 - window_height / 2)
-#     root.geometry("+{}+{}".format(position_right, position_down))
+#     app = TokenizerGUI(root)
 #     root.mainloop()
 
 # if __name__ == "__main__":
 #     main()
 
 
+
 from tokenizer import Lexer
+from pars3r import Parser
 
 lexer = Lexer()
 input_text = input("Enter the input text: ")
