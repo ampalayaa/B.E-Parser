@@ -1,4 +1,3 @@
-
 # import tkinter as tk
 # from tkinter import font
 # from tokenizer import Lexer
@@ -52,21 +51,33 @@
 
 
 
+from sympy.logic.boolalg import And, Or, Not
+from sympy.abc import symbols
+from sympy.logic.boolalg import to_dnf
 from tokenizer import Lexer
-from pars3r import Parser
 
-lexer = Lexer()
-input_text = input("Enter the input text: ")
-lexer.input_text(input_text)
-tokens = lexer.get_next_token()
-output_tokens = []
+def simplify_expression(expression):
+    # Define symbols for variables
+    vars = symbols(set(expression) - set("&|!~() "))
 
-for token in tokens:
-    if token.type.name == "VAR":
-        output_tokens.append(" | \"" + token.value + "\"" if token.value else " | \"" + token.type.name + "\"")
-    else:
-        output_tokens.append(" | \"" + token.type.name + "\"" if token.value is None else " | \"" + token.type.name + " | " + token.value + "\"")
+    # Create a dictionary mapping variable names to their corresponding SymPy symbols
+    sym_vars = {str(var): var for var in vars}
 
-grouped_tokens = ["(" + " | ".join(output_tokens[:5]) + ")" + " | " + " | ".join(output_tokens[5:])]
+    # Parse the expression into a SymPy expression
+    sympy_expr = eval(expression, {**sym_vars, 'And': And, 'Or': Or, 'Not': Not})
 
-print(" | ".join(grouped_tokens))
+    # Convert to Disjunctive Normal Form (DNF)
+    dnf_expr = to_dnf(sympy_expr)
+
+    # Convert back to string representation
+    return str(dnf_expr)
+
+# Take input from the user
+expression = input("Enter a Boolean expression: ")
+
+# Simplify the expression
+simplified_expression = simplify_expression(expression)
+
+# Print the original and simplified expressions
+print("Original Expression:", expression)
+print("Simplified Expression:", simplified_expression)
