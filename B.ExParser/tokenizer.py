@@ -1,18 +1,19 @@
-class TokenType:
+class TokenType: # -> define the type of the token type
     AND = "AND"
     OR = "OR"
     NOT = "NOT"
     VARIABLE = "VARIABLE"
     LPAREN = "LPAREN"
     RPAREN = "RPAREN"
+    PLUS = "PLUS"
     EOF = "EOF"
 
-class Token:
+class Token: # -> define the token type and the string
     def __init__(self, type, value=None):
         self.type = type
         self.value = value
 
-class Lexer:
+class Lexer: 
     def __init__(self, text):
         self.text = text
         self.pos = 0
@@ -48,12 +49,12 @@ class Lexer:
             if self.current_char == '&':
                 self.advance()
                 return Token(TokenType.AND)
-            
+
             if self.current_char == '|':
                 self.advance()
                 return Token(TokenType.OR)
 
-            if self.current_char == '!':
+            if self.current_char == '~':
                 self.advance()
                 return Token(TokenType.NOT)
 
@@ -64,10 +65,15 @@ class Lexer:
             if self.current_char == ')':
                 self.advance()
                 return Token(TokenType.RPAREN)
+            
+            if self.current_char == '+':
+                self.advance()
+                return Token(TokenType.PLUS)
 
             if self.current_char.isalnum():
                 return Token(TokenType.VARIABLE, self.variable())
 
+            print(f"Invalid character: '{self.current_char}'") 
             self.error()
 
         return Token(TokenType.EOF)
