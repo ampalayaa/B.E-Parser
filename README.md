@@ -9,7 +9,4 @@ note: please install sympy python library and customtkinter to run the program H
 suggested python venv: python 11
 
 
-
-naiiyak na ako kase walang expression ang masimplify man lang. 
-fleece if u're kind enough pakiayos po ang logic, kase I really don't know kung
-na simplify ba ang expression o ging change lang ang possision ng char huhu.
+oki na sya hehhehhshajnkajkda
